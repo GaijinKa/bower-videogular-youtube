@@ -117,6 +117,7 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
 
                         function onVideoStateChange(event) {
                             var player = event.target;
+                            let propagateEvent = event.data;
 
                             switch (event.data) {
                                 case YT.PlayerState.ENDED:
@@ -149,7 +150,7 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                                 break;
                             }
                             
-                            $rootScope.$emit('ytVideoStateChange', event.data);
+                            $rootScope.$emit('ytVideoStateChange', propagateEvent);
                         }
 
                         function isYoutube(url) {
