@@ -38,10 +38,12 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                                 var keyValuePair = item.split("=");
                                 if (playerVars.hasOwnProperty(keyValuePair[0])) {
                                   playerVars[keyValuePair[0]] = keyValuePair[1] || 0;
+                                } else {
+                                    playerVars[keyValuePair[0]] = keyValuePair[1];
                                 }
                             });
                         }
-
+                        
                         function getYoutubeId(url) {
                             return url.match(youtubeReg)[2];
                         }
@@ -57,6 +59,8 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                                         ytplayer = new YT.Player(API.mediaElement[0], {
                                             videoId: getYoutubeId(url),
                                             playerVars: playerVars,
+                                            height: '1280',
+                                            width: '720',
                                             events: {
                                                 'onReady': onVideoReady,
                                                 'onStateChange': onVideoStateChange
@@ -72,6 +76,11 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                         }
 
                         function onVideoReady() {
+
+                            if (playerVars.hasOwnProperty("vq")) {
+                                ytplayer.setPlaybackQuality(playerVars["vq"]);
+                            }
+
                             //Define some property, method for player
                             API.mediaElement[0].__defineGetter__("currentTime", function () {
                                 return ytplayer.getCurrentTime();
@@ -110,7 +119,7 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                             }
                             updateTimer = setInterval(updateTime, 600);
                             angular.element(ytplayer.getIframe()).css({'width':'100%','height':'100%'});
-                            
+
                             $rootScope.$emit('ytVideoReady');
 
                         }
@@ -149,7 +158,7 @@ angular.module("info.vietnamcode.nampnq.videogular.plugins.youtube", [])
                                     //No appropriate state
                                 break;
                             }
-                            
+
                             $rootScope.$emit('ytVideoStateChange', propagateEvent);
                         }
 
